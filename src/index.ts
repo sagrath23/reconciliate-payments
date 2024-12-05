@@ -5,9 +5,11 @@ export const reconciliatePayments = (
   payments: Array<Payment>
 ): Array<MismatchedPayment> => {
   const workbook = {};
+  const reverseWorkbook = {};
   const mismatchedPayments: Array<MismatchedPayment> = []; 
 
   expenses.forEach(({ truckId, date, amount }) => workbook[`${truckId}-${date}`] ? workbook[`${truckId}-${date}`] += amount : workbook[`${truckId}-${date}`] = amount);
+  payments.forEach(({ truckId, date, paidAmount }) => reverseWorkbook[`${truckId}-${date}`] = paidAmount);
 
   payments.forEach(({ truckId, date, paidAmount }) => {
     if(workbook[`${truckId}-${date}`]) {
@@ -22,6 +24,17 @@ export const reconciliatePayments = (
     }
   });
 
+  expenses.forEach(({ truckId, date, amount }) => {
+    if(!(reverseWorkbook[`${truckId}-${date}`])) {
+      mismatchedPayments.push({
+        truckId,
+        date,
+        expectedAmount: workbook[`${truckId}-${date}`],
+        actualPaidAmount: 0
+      });
+    }
+  })
+
   return mismatchedPayments;
 };
 
@@ -29,6 +42,7 @@ const expenses = [
   { truckId: "TRUCK1", date: "2024-12-01", amount: 100 },
   { truckId: "TRUCK1", date: "2024-12-01", amount: 50 },
   { truckId: "TRUCK2", date: "2024-12-01", amount: 80 },
+  { truckId: "TRUCK3", date: "2024-12-01", amount: 80 },
 ];
 
 const payments = [
