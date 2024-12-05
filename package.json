@@ -1,0 +1,13 @@
+{
+  "name": "reconciliate-payments",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A small exercise to reconciliate payments",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "vitest",
+    "start": "node --experimental-strip-types ./src/index.ts"
+  },
+  "author": "Steven Augusto Villegas Castellanos <sagrath23@gmail.com>",
+  "license": "ISC"
+}
